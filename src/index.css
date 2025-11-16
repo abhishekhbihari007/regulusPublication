@@ -98,6 +98,30 @@ input[type="number"] {
 img {
   max-width: 100%;
   height: auto;
+  display: block;
+}
+
+/* Ensure all images are responsive */
+img, 
+picture, 
+video {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+}
+
+/* Ensure text wraps properly */
+p, h1, h2, h3, h4, h5, h6, span, div, section, article {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .container {
@@ -107,9 +131,14 @@ img {
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+  position: relative;
 }
 
+/* Ensure all sections are responsive */
 .section {
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
   padding: 60px 0;
 }
 
@@ -190,6 +219,34 @@ img {
   border-color: var(--primary-color);
 }
 
+/* Responsive Design - Mobile First Approach */
+@media (max-width: 480px) {
+  .section {
+    padding: 30px 0;
+  }
+  
+  .container {
+    padding: 0 12px;
+  }
+
+  .page-hero {
+    padding: 40px 0;
+  }
+
+  .page-hero h1 {
+    font-size: 24px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
 @media (max-width: 768px) {
   .section {
     padding: 40px 0;
@@ -197,6 +254,25 @@ img {
   
   .container {
     padding: 0 15px;
+  }
+
+  .page-hero {
+    padding: 50px 0;
+  }
+
+  .page-hero h1 {
+    font-size: 28px;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1400px;
+    padding: 0 40px;
   }
 }
 

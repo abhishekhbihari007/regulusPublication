@@ -208,6 +208,16 @@
   border-top: 1px solid var(--border-color);
 }
 
+@media (max-width: 968px) {
+  .guidelines-section {
+    padding: 35px 25px;
+  }
+
+  .submission-form {
+    padding: 35px 25px;
+  }
+}
+
 @media (max-width: 768px) {
   .guidelines-section {
     padding: 30px 20px;
@@ -223,6 +233,51 @@
 
   .genre-specs {
     grid-template-columns: 1fr;
+  }
+
+  .faq-section h2 {
+    font-size: 28px;
+  }
+
+  .faq-question {
+    padding: 15px;
+    font-size: 15px;
+  }
+
+  .faq-answer {
+    padding: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .guidelines-section {
+    padding: 25px 15px;
+  }
+
+  .submission-form {
+    padding: 25px 15px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .faq-section h2 {
+    font-size: 24px;
+  }
+
+  .faq-question {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .faq-answer {
+    padding: 12px;
+    font-size: 13px;
   }
 }
 

@@ -210,6 +210,12 @@
   }
 }
 
+@media (max-width: 968px) {
+  .content-grid {
+    gap: 40px;
+  }
+}
+
 @media (max-width: 768px) {
   .page-hero {
     padding: 60px 0;
@@ -226,6 +232,34 @@
   .mission-card,
   .vision-card {
     padding: 30px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero {
+    padding: 40px 0;
+  }
+
+  .page-hero h1 {
+    font-size: 24px;
+  }
+
+  .content-text h2 {
+    font-size: 22px;
+  }
+
+  .content-text p {
+    font-size: 14px;
+  }
+
+  .mission-card,
+  .vision-card {
+    padding: 20px 15px;
+  }
+
+  .mission-card h3,
+  .vision-card h3 {
+    font-size: 20px;
   }
 }
 

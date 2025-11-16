@@ -182,3 +182,45 @@
   }
 }
 
+@media (max-width: 480px) {
+  .contact-info h2,
+  .contact-form-container h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .contact-intro {
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  .contact-form-container {
+    padding: 20px 15px;
+  }
+
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .contact-text h3 {
+    font-size: 16px;
+  }
+
+  .contact-text p {
+    font-size: 14px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .social-links-large a {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+}
+

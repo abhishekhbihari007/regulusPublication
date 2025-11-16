@@ -280,3 +280,29 @@
   }
 }
 
+@media (max-width: 480px) {
+  .article-card {
+    padding: 20px 15px;
+  }
+
+  .article-card h3 {
+    font-size: 18px;
+  }
+
+  .article-meta {
+    font-size: 12px;
+  }
+
+  .interview-highlight {
+    padding: 25px 15px;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .category-card {
+    padding: 20px 15px;
+  }
+}
+

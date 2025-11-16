@@ -486,6 +486,7 @@
   overflow-x: hidden;
   overflow-y: hidden;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .nav-menu > li {
@@ -655,6 +656,18 @@
   }
 }
 
+@media (max-width: 1200px) {
+  .nav-menu {
+    padding-left: 200px;
+    gap: 6px;
+  }
+
+  .nav-menu > li > a {
+    padding: 8px 15px;
+    font-size: 15px;
+  }
+}
+
 @media (max-width: 968px) {
   .top-header-bar {
     display: none;
@@ -726,6 +739,7 @@
   .nav-menu {
     flex-direction: column;
     padding: 0;
+    padding-left: 0;
     max-height: calc(100vh - 150px);
     overflow-y: auto;
     width: 100%;
@@ -734,6 +748,8 @@
     visibility: visible;
     transform: none;
     background-color: #2C3E50;
+    gap: 0;
+    flex-wrap: nowrap;
   }
 
   .nav-menu > li {
@@ -744,6 +760,7 @@
   .nav-menu > li > a {
     padding: 15px 20px;
     width: 100%;
+    white-space: normal;
   }
 
   .dropdown-menu {
@@ -807,5 +824,44 @@
   .login-button {
     padding: 8px 12px;
     font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-header-section {
+    padding: 10px 0;
+  }
+
+  .main-header-section .container {
+    padding: 0 12px;
+  }
+
+  .logo-image {
+    height: 70px;
+    max-width: 300px;
+  }
+
+  .top-header-left {
+    min-width: 120px;
+  }
+
+  .icon-button {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+
+  .login-button {
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+
+  .nav-menu > li > a {
+    font-size: 13px;
+    padding: 12px 15px;
+  }
+
+  .top-header-right-section {
+    gap: 5px;
   }
 }

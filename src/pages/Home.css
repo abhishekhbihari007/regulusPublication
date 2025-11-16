@@ -84,6 +84,9 @@
   margin: 0;
   text-align: center;
   width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Hero Section - Modern Vibrant Style */
@@ -365,6 +368,23 @@
   }
 }
 
+/* Tablet and below */
+@media (max-width: 968px) {
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 25px;
+  }
+
+  .genre-section {
+    padding: 35px 25px;
+  }
+
+  .genre-title {
+    font-size: 28px;
+  }
+}
+
+/* Mobile */
 @media (max-width: 768px) {
   .genre-section {
     padding: 30px 20px;
@@ -431,6 +451,41 @@
 
   .newsletter-form-large button {
     width: 100%;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .genre-section {
+    padding: 25px 15px;
+    margin-bottom: 15px;
+  }
+
+  .genre-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .book-card {
+    padding: 15px;
+  }
+
+  .book-image-container {
+    height: 180px;
+    margin: 10px 0;
+  }
+
+  .book-title {
+    font-size: 11px;
+    min-height: 45px;
+    line-height: 1.3;
   }
 }
 
