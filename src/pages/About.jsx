@@ -44,10 +44,10 @@ const About = () => {
   ]
 
   const awards = [
-    "Best Independent Publisher 2023 - Publishing Excellence Awards",
-    "Editor's Choice Award 2022 - Literary Review",
-    "Outstanding Marketing Campaign 2023 - Book Marketing Association",
-    "Top 10 Publishing Houses - Readers' Choice Awards 2023"
+    "Best Independent Publisher 2025 - Publishing Excellence Awards",
+    "Editor's Choice Award 2024 - Literary Review",
+    "Outstanding Marketing Campaign 2025 - Book Marketing Association",
+    "Top 10 Publishing Houses - Readers' Choice Awards 2024"
   ]
 
   return (

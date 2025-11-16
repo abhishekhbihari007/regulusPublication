@@ -1,6 +1,26 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Home.css'
 
 const Home = () => {
+  const [email, setEmail] = useState('')
+  const [expandedGenres, setExpandedGenres] = useState({})
+  const booksPerGenre = 5 // Show 5 books initially
+
+  const handleSubscribe = (e) => {
+    e.preventDefault()
+    // Handle newsletter subscription
+    console.log('Subscribing:', email)
+    setEmail('')
+    alert('Thank you for subscribing!')
+  }
+
+  const toggleGenre = (genre) => {
+    setExpandedGenres(prev => ({
+      ...prev,
+      [genre]: !prev[genre]
+    }))
+  }
   const books = [
     // Engineering (10 books)
     { id: 1, title: "Quantum Materials and the Future of Intelligent Machines", image: "/images/1.png", genre: "Engineering" },
@@ -83,23 +103,90 @@ const Home = () => {
 
   return (
     <div className="home">
-      {genres.map((genre) => (
-        <section key={genre} className="genre-section">
-          <div className="container">
-            <h2 className="genre-title">{genre}</h2>
-            <div className="books-grid">
-              {booksByGenre[genre]?.map((book) => (
-                <div key={book.id} className="book-card">
-                  <div className="book-image-container">
-                    <img src={book.image} alt={book.title} className="book-image" />
-                  </div>
-                  <h3 className="book-title">{book.title}</h3>
-                </div>
-              ))}
-            </div>
+      {/* Discover More Section */}
+      <section className="discover-more-section">
+        <div className="container">
+          <div className="discover-more-grid">
+            <Link to="/about" className="discover-card">
+              <h3 className="discover-card-title">About Us</h3>
+              <p className="discover-card-description">Learn about our story, mission, and the team behind Regulus International</p>
+              <span className="discover-card-arrow">→</span>
+            </Link>
+            
+            <Link to="/services" className="discover-card">
+              <h3 className="discover-card-title">Services</h3>
+              <p className="discover-card-description">From manuscript evaluation to marketing and distribution</p>
+              <span className="discover-card-arrow">→</span>
+            </Link>
+            
+            <Link to="/authors" className="discover-card">
+              <h3 className="discover-card-title">Author Spotlight</h3>
+              <p className="discover-card-description">Meet our talented authors and read their success stories</p>
+              <span className="discover-card-arrow">→</span>
+            </Link>
+            
+            <Link to="/catalog" className="discover-card">
+              <h3 className="discover-card-title">Latest Releases</h3>
+              <p className="discover-card-description">Discover our newest titles across all genres</p>
+              <span className="discover-card-arrow">→</span>
+            </Link>
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
+
+      {genres.map((genre) => {
+        const genreBooks = booksByGenre[genre] || []
+        const isExpanded = expandedGenres[genre]
+        const displayedBooks = isExpanded ? genreBooks : genreBooks.slice(0, booksPerGenre)
+        const hasMoreBooks = genreBooks.length > booksPerGenre
+
+        return (
+          <section key={genre} className="genre-section">
+            <div className="container">
+              <h2 className="genre-title">{genre}</h2>
+              <div className="books-grid">
+                {displayedBooks.map((book) => (
+                  <div key={book.id} className="book-card">
+                    <div className="book-image-container">
+                      <img src={book.image} alt={book.title} className="book-image" />
+                    </div>
+                    <h3 className="book-title">{book.title}</h3>
+                  </div>
+                ))}
+              </div>
+              {hasMoreBooks && (
+                <div className="view-more-container">
+                  <button 
+                    className="view-more-button" 
+                    onClick={() => toggleGenre(genre)}
+                  >
+                    {isExpanded ? 'View Less' : `View More (${genreBooks.length - booksPerGenre} more)`}
+                  </button>
+                </div>
+              )}
+            </div>
+          </section>
+        )
+      })}
+
+      {/* Newsletter Subscription Section */}
+      <section className="newsletter-section">
+        <div className="container">
+          <h2 className="newsletter-title">Stay Updated</h2>
+          <p className="newsletter-description">Subscribe to our newsletter for the latest releases, author interviews, and publishing insights.</p>
+          <form className="newsletter-form" onSubmit={handleSubscribe}>
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className="newsletter-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit" className="newsletter-button">Subscribe</button>
+          </form>
+        </div>
+      </section>
     </div>
   )
 }
