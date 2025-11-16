@@ -621,6 +621,13 @@
   display: none;
 }
 
+/* Show mobile utility icons on mobile */
+@media (max-width: 968px) {
+  .mobile-utility-icons {
+    display: flex;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .logo-image {
@@ -670,7 +677,17 @@
 
 @media (max-width: 968px) {
   .top-header-bar {
-    display: none;
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 1001;
+  }
+
+  .top-header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
   }
 
   .main-header-section {
@@ -693,16 +710,20 @@
   }
 
   .logo-image {
-    height: 110px;
-    max-width: 600px;
+    height: 80px;
+    max-width: 400px;
   }
   
   .top-header-left {
-    min-width: 200px;
+    min-width: 150px;
     padding-right: 10px;
   }
 
   .header-search-section {
+    display: none;
+  }
+
+  .top-header-right-section {
     display: none;
   }
 
@@ -714,9 +735,22 @@
   }
 
   .mobile-utility-icons .icon-button {
-    width: 38px;
-    height: 38px;
-    font-size: 16px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-utility-icons .icon-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
   }
 
   .main-navbar {
@@ -734,6 +768,7 @@
     right: 0;
     z-index: 1000;
     border-top: 1px solid rgba(200, 200, 200, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
   .nav-menu {
