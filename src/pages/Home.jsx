@@ -148,7 +148,13 @@ const Home = () => {
                 {displayedBooks.map((book) => (
                   <div key={book.id} className="book-card">
                     <div className="book-image-container">
-                      <img src={book.image} alt={book.title} className="book-image" />
+                      <img 
+                        src={book.image} 
+                        alt={book.title} 
+                        className="book-image" 
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                     <h3 className="book-title">{book.title}</h3>
                   </div>

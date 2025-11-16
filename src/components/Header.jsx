@@ -20,7 +20,13 @@ const Header = () => {
             {/* Left Side: Logo */}
             <div className="top-header-left">
               <Link to="/" className="logo-container">
-                <img src="/ChatGPT_Image_Nov_16__2025__05_33_30_PM-removebg-preview.png" alt="Regulus International Publishing House" className="logo-image" />
+                <img 
+                  src="/ChatGPT_Image_Nov_16__2025__05_33_30_PM-removebg-preview.png" 
+                  alt="Regulus International Publishing House" 
+                  className="logo-image"
+                  loading="eager"
+                  fetchPriority="high"
+                />
               </Link>
             </div>
 

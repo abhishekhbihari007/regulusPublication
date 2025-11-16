@@ -110,6 +110,16 @@ video {
   object-fit: contain;
 }
 
+/* Image loading optimization */
+img[loading="lazy"] {
+  content-visibility: auto;
+}
+
+/* Smooth image loading */
+img {
+  will-change: opacity;
+}
+
 /* Prevent horizontal overflow */
 html, body {
   overflow-x: hidden;

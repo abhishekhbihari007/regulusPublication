@@ -817,7 +817,13 @@ const Catalog = () => {
               <div key={book.id} className="book-list-item">
                 <div className="book-list-thumbnail">
                   {book.image ? (
-                    <img src={book.image} alt={book.title} className="book-cover-image" />
+                    <img 
+                      src={book.image} 
+                      alt={book.title} 
+                      className="book-cover-image" 
+                      loading="lazy"
+                      decoding="async"
+                    />
                   ) : (
                   <div className="book-placeholder">
                     <span>{book.title.charAt(0)}</span>
