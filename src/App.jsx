@@ -10,6 +10,7 @@ import Submissions from './pages/Submissions'
 import Blog from './pages/Blog'
 import Contact from './pages/Contact'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import './App.css'
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </main>
       <Footer />
