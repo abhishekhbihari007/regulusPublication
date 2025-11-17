@@ -732,6 +732,8 @@
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1002;
   }
 
   .mobile-utility-icons .icon-button {
@@ -747,10 +749,20 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1002;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .mobile-utility-icons .icon-button:hover {
+  .mobile-utility-icons .icon-button:hover,
+  .mobile-utility-icons .icon-button:active {
     background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+  }
+
+  .mobile-utility-icons .icon-button.menu-toggle {
+    z-index: 1003;
   }
 
   .main-navbar {
@@ -761,7 +773,7 @@
   }
 
   .main-navbar.mobile-open {
-    display: block;
+    display: block !important;
     position: absolute;
     top: 100%;
     left: 0;
@@ -769,6 +781,18 @@
     z-index: 1000;
     border-top: 1px solid rgba(200, 200, 200, 0.3);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s ease-out;
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .nav-menu {

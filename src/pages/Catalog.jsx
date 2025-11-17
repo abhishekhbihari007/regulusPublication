@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Catalog.css'
 
 const Catalog = () => {
   const [selectedGenre, setSelectedGenre] = useState('all')
   const [selectedYear, setSelectedYear] = useState('all')
   const [filterType, setFilterType] = useState('all')
+  const [loadedImages, setLoadedImages] = useState(new Set())
+  const imageRefs = useRef({})
 
   const genres = ['All', 'Engineering', 'Agriculture', 'Biotechnology', 'Comics / Graphic Novels', 'Business & Entrepreneurship', 'Novels / Fiction']
 
@@ -689,6 +691,58 @@ const Catalog = () => {
 
   const years = [...new Set(books.map(book => book.year))].sort((a, b) => b - a)
 
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '100px', // Start loading 100px before image enters viewport
+      threshold: 0.01
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target
+          
+          // Load image if it has data-src and hasn't been loaded yet
+          if (img.dataset.src && !img.src) {
+            img.src = img.dataset.src
+            img.removeAttribute('data-src')
+          }
+          
+          observer.unobserve(img)
+        }
+      })
+    }, observerOptions)
+
+    // Observe all images that have data-src (lazy loaded images)
+    Object.values(imageRefs.current).forEach((ref) => {
+      if (ref && ref.dataset.src) {
+        observer.observe(ref)
+      }
+    })
+
+    return () => {
+      Object.values(imageRefs.current).forEach((ref) => {
+        if (ref) observer.unobserve(ref)
+      })
+    }
+  }, [filteredBooks])
+
+  // Preload first 3 images immediately (above the fold)
+  useEffect(() => {
+    const firstThreeBooks = filteredBooks.slice(0, 3)
+    firstThreeBooks.forEach((book) => {
+      if (book.image && !loadedImages.has(book.image)) {
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.href = book.image
+        document.head.appendChild(link)
+      }
+    })
+  }, [filteredBooks])
+
   return (
     <div className="catalog">
       <section className="section">
@@ -813,17 +867,37 @@ const Catalog = () => {
 
               {/* Books List */}
               <div className="books-list">
-            {filteredBooks.map((book, index) => (
+            {filteredBooks.map((book, index) => {
+              const isAboveFold = index < 3
+              const isLoaded = loadedImages.has(book.image)
+              
+              return (
               <div key={book.id} className="book-list-item">
                 <div className="book-list-thumbnail">
                   {book.image ? (
-                    <img 
-                      src={book.image} 
-                      alt={book.title} 
-                      className="book-cover-image" 
-                      loading="lazy"
-                      decoding="async"
-                    />
+                    <>
+                      {!isLoaded && !isAboveFold && <div className="image-placeholder" />}
+                      <img 
+                        ref={(el) => {
+                          if (el) imageRefs.current[book.id] = el
+                        }}
+                        data-src={!isAboveFold ? book.image : undefined}
+                        src={isAboveFold ? book.image : undefined}
+                        alt={book.title} 
+                        className={`book-cover-image ${isLoaded || isAboveFold ? 'loaded' : ''}`}
+                        loading={isAboveFold ? "eager" : "lazy"}
+                        decoding="async"
+                        fetchPriority={isAboveFold ? "high" : "auto"}
+                        width="160"
+                        height="200"
+                        onLoad={(e) => {
+                          const imgSrc = e.target.src || e.target.dataset.src
+                          if (imgSrc && !loadedImages.has(imgSrc)) {
+                            setLoadedImages(prev => new Set([...prev, imgSrc]))
+                          }
+                        }}
+                      />
+                    </>
                   ) : (
                   <div className="book-placeholder">
                     <span>{book.title.charAt(0)}</span>
@@ -841,7 +915,7 @@ const Catalog = () => {
                    </div>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
 
               {filteredBooks.length === 0 && (

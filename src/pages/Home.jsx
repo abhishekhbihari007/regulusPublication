@@ -166,7 +166,7 @@ const Home = () => {
                     className="view-more-button" 
                     onClick={() => toggleGenre(genre)}
                   >
-                    {isExpanded ? 'View Less' : `View More (${genreBooks.length - booksPerGenre} more)`}
+                    {isExpanded ? 'View Less' : 'View More'}
                   </button>
                 </div>
               )}

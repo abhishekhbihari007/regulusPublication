@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { FaBars, FaTimes, FaSearch, FaUser, FaGlobe } from 'react-icons/fa'
 import './Header.css'
@@ -7,9 +7,32 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
+  const toggleMenu = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsMenuOpen(prev => !prev)
   }
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isMenuOpen && !event.target.closest('.main-navbar') && !event.target.closest('.mobile-utility-icons')) {
+        setIsMenuOpen(false)
+      }
+    }
+
+    if (isMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
 
   return (
     <>
@@ -82,24 +105,24 @@ const Header = () => {
       <nav className={`main-navbar ${isMenuOpen ? 'mobile-open' : ''}`}>
         <div className="container">
           <ul className="nav-menu">
-            <li><Link to="/">Home</Link></li>
+            <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
             <li className="dropdown">
-              <Link to="/catalog">
+              <Link to="/catalog" onClick={() => setIsMenuOpen(false)}>
                 Catalog
               </Link>
               <ul className="dropdown-menu">
-                <li><Link to="/catalog?genre=fiction">Fiction</Link></li>
-                <li><Link to="/catalog?genre=non-fiction">Non-Fiction</Link></li>
-                <li><Link to="/catalog?genre=children">Children's Books</Link></li>
-                <li><Link to="/catalog?genre=academic">Academic</Link></li>
-                <li><Link to="/catalog?genre=biography">Biography</Link></li>
-                <li><Link to="/catalog?genre=poetry">Poetry</Link></li>
+                <li><Link to="/catalog?genre=fiction" onClick={() => setIsMenuOpen(false)}>Fiction</Link></li>
+                <li><Link to="/catalog?genre=non-fiction" onClick={() => setIsMenuOpen(false)}>Non-Fiction</Link></li>
+                <li><Link to="/catalog?genre=children" onClick={() => setIsMenuOpen(false)}>Children's Books</Link></li>
+                <li><Link to="/catalog?genre=academic" onClick={() => setIsMenuOpen(false)}>Academic</Link></li>
+                <li><Link to="/catalog?genre=biography" onClick={() => setIsMenuOpen(false)}>Biography</Link></li>
+                <li><Link to="/catalog?genre=poetry" onClick={() => setIsMenuOpen(false)}>Poetry</Link></li>
               </ul>
             </li>
-            <li><Link to="/services">Services</Link></li>
-            <li><Link to="/authors">Authors</Link></li>
-            <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
+            <li><Link to="/services" onClick={() => setIsMenuOpen(false)}>Services</Link></li>
+            <li><Link to="/authors" onClick={() => setIsMenuOpen(false)}>Authors</Link></li>
+            <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
+            <li><Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link></li>
           </ul>
         </div>
       </nav>
