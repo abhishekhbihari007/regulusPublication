@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import './Home.css'
 
 const Home = () => {
   const [email, setEmail] = useState('')
   const [expandedGenres, setExpandedGenres] = useState({})
+  const [loadedImages, setLoadedImages] = useState(new Set())
+  const imageRefs = useRef({})
   const booksPerGenre = 5 // Show 5 books initially
 
   const handleSubscribe = (e) => {
@@ -101,6 +103,60 @@ const Home = () => {
 
   const genres = ['Engineering', 'Agriculture', 'Biotechnology', 'Comics / Graphic Novels', 'Business & Entrepreneurship', 'Novels / Fiction']
 
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '100px', // Start loading 100px before image enters viewport
+      threshold: 0.01
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target
+          
+          // Load image if it has data-src and hasn't been loaded yet
+          if (img.dataset.src && !img.src) {
+            img.src = img.dataset.src
+            img.removeAttribute('data-src')
+          }
+          
+          observer.unobserve(img)
+        }
+      })
+    }, observerOptions)
+
+    // Observe all images that have data-src (lazy loaded images)
+    Object.values(imageRefs.current).forEach((ref) => {
+      if (ref && ref.dataset.src) {
+        observer.observe(ref)
+      }
+    })
+
+    return () => {
+      Object.values(imageRefs.current).forEach((ref) => {
+        if (ref) observer.unobserve(ref)
+      })
+    }
+  }, [expandedGenres])
+
+  // Preload first 6 images (first row of first genre)
+  useEffect(() => {
+    const firstGenreBooks = booksByGenre[genres[0]] || []
+    const firstSixBooks = firstGenreBooks.slice(0, 6)
+    firstSixBooks.forEach((book) => {
+      if (book.image && !loadedImages.has(book.image)) {
+        const link = document.createElement('link')
+        link.rel = 'preload'
+        link.as = 'image'
+        link.href = book.image
+        document.head.appendChild(link)
+        setLoadedImages(prev => new Set([...prev, book.image]))
+      }
+    })
+  }, [])
+
   return (
     <div className="home">
       {/* Discover More Section */}
@@ -145,20 +201,41 @@ const Home = () => {
             <div className="container">
               <h2 className="genre-title">{genre}</h2>
               <div className="books-grid">
-                {displayedBooks.map((book) => (
+                {displayedBooks.map((book, bookIndex) => {
+                  // First 6 images (first genre, first row) should load immediately
+                  const isFirstGenre = genre === genres[0]
+                  const isAboveFold = isFirstGenre && bookIndex < 6
+                  const isLoaded = loadedImages.has(book.image)
+                  
+                  return (
                   <div key={book.id} className="book-card">
                     <div className="book-image-container">
+                      {!isLoaded && !isAboveFold && <div className="image-placeholder" />}
                       <img 
-                        src={book.image} 
+                        ref={(el) => {
+                          if (el) imageRefs.current[book.id] = el
+                        }}
+                        data-src={!isAboveFold ? book.image : undefined}
+                        src={isAboveFold ? book.image : undefined}
                         alt={book.title} 
-                        className="book-image" 
-                        loading="lazy"
+                        className={`book-image ${isLoaded || isAboveFold ? 'loaded' : ''}`}
+                        loading={isAboveFold ? "eager" : "lazy"}
                         decoding="async"
+                        fetchPriority={isAboveFold ? "high" : "auto"}
+                        width="200"
+                        height="320"
+                        onLoad={(e) => {
+                          const imgSrc = e.target.src || e.target.dataset.src
+                          if (imgSrc && !loadedImages.has(imgSrc)) {
+                            setLoadedImages(prev => new Set([...prev, imgSrc]))
+                          }
+                        }}
                       />
                     </div>
                     <h3 className="book-title">{book.title}</h3>
                   </div>
-                ))}
+                  )
+                })}
               </div>
               {hasMoreBooks && (
                 <div className="view-more-container">
