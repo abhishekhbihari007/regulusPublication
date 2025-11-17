@@ -769,6 +769,11 @@
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     user-select: none;
+    text-decoration: none;
+  }
+  
+  .mobile-utility-icons .icon-button:visited {
+    color: white;
   }
 
   .mobile-utility-icons .icon-button:hover,

@@ -114,10 +114,25 @@ const Header = () => {
 
             {/* Mobile Utility Icons */}
             <div className="mobile-utility-icons">
-              <button className="icon-button" aria-label="User Account">
+              <Link to="/login" className="icon-button" aria-label="User Account">
                 <FaUser />
-              </button>
-              <button className="icon-button" aria-label="Search">
+              </Link>
+              <button 
+                className="icon-button" 
+                aria-label="Search"
+                onClick={(e) => {
+                  e.preventDefault()
+                  // Focus on search input if visible, or show mobile search
+                  const searchInput = document.querySelector('.header-search-input')
+                  if (searchInput) {
+                    searchInput.focus()
+                  } else {
+                    // Could open a mobile search modal here
+                    alert('Search functionality - Click the search bar in the header')
+                  }
+                }}
+                type="button"
+              >
                 <FaSearch />
               </button>
               <button 
