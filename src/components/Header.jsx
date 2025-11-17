@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { FaBars, FaTimes, FaSearch, FaUser, FaGlobe } from 'react-icons/fa'
 import './Header.css'
@@ -6,30 +6,57 @@ import './Header.css'
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const headerRef = useRef(null)
 
   const toggleMenu = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
+    if (e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
     setIsMenuOpen(prev => !prev)
   }
 
-  // Close menu when clicking outside
+  // Update menu position when header height changes
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isMenuOpen && !event.target.closest('.main-navbar') && !event.target.closest('.mobile-utility-icons')) {
-        setIsMenuOpen(false)
+    if (isMenuOpen && headerRef.current) {
+      const headerHeight = headerRef.current.offsetHeight
+      const menu = document.querySelector('.main-navbar.mobile-open')
+      if (menu) {
+        menu.style.top = `${headerHeight}px`
       }
     }
+  }, [isMenuOpen])
 
-    if (isMenuOpen) {
-      document.addEventListener('click', handleClickOutside)
-      document.body.style.overflow = 'hidden'
-    } else {
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!isMenuOpen) {
       document.body.style.overflow = ''
+      return
     }
 
+    document.body.style.overflow = 'hidden'
+    
+    const handleClickOutside = (event) => {
+      const target = event.target
+      const menuButton = target.closest('.menu-toggle')
+      const menuNav = target.closest('.main-navbar')
+      
+      // Don't close if clicking on menu button or inside menu
+      if (menuButton || menuNav) {
+        return
+      }
+      
+      setIsMenuOpen(false)
+    }
+
+    // Add listener after a short delay to avoid immediate closure
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', handleClickOutside, true)
+    }, 200)
+
     return () => {
-      document.removeEventListener('click', handleClickOutside)
+      clearTimeout(timeoutId)
+      document.removeEventListener('click', handleClickOutside, true)
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
@@ -37,7 +64,7 @@ const Header = () => {
   return (
     <>
       {/* Top Header Bar - Logo, Login and Search */}
-      <div className="top-header-bar">
+      <div className="top-header-bar" ref={headerRef}>
         <div className="container">
           <div className="top-header-content">
             {/* Left Side: Logo */}
@@ -93,39 +120,54 @@ const Header = () => {
               <button className="icon-button" aria-label="Search">
                 <FaSearch />
               </button>
-              <button className="icon-button menu-toggle" onClick={toggleMenu} aria-label="Menu">
+              <button 
+                className="icon-button menu-toggle" 
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  toggleMenu()
+                }}
+                aria-label="Menu"
+                aria-expanded={isMenuOpen}
+                type="button"
+              >
                 {isMenuOpen ? <FaTimes /> : <FaBars />}
               </button>
             </div>
           </div>
         </div>
+        
+        {/* Main Navigation Bar - Inside header for proper positioning */}
+        <nav 
+          className={`main-navbar ${isMenuOpen ? 'mobile-open' : ''}`} 
+          style={{ 
+            display: isMenuOpen ? 'block' : 'none'
+          }}
+        >
+          <div className="container">
+            <ul className="nav-menu">
+              <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+              <li className="dropdown">
+                <Link to="/catalog" onClick={() => setIsMenuOpen(false)}>
+                  Catalog
+                </Link>
+                <ul className="dropdown-menu">
+                  <li><Link to="/catalog?genre=fiction" onClick={() => setIsMenuOpen(false)}>Fiction</Link></li>
+                  <li><Link to="/catalog?genre=non-fiction" onClick={() => setIsMenuOpen(false)}>Non-Fiction</Link></li>
+                  <li><Link to="/catalog?genre=children" onClick={() => setIsMenuOpen(false)}>Children's Books</Link></li>
+                  <li><Link to="/catalog?genre=academic" onClick={() => setIsMenuOpen(false)}>Academic</Link></li>
+                  <li><Link to="/catalog?genre=biography" onClick={() => setIsMenuOpen(false)}>Biography</Link></li>
+                  <li><Link to="/catalog?genre=poetry" onClick={() => setIsMenuOpen(false)}>Poetry</Link></li>
+                </ul>
+              </li>
+              <li><Link to="/services" onClick={() => setIsMenuOpen(false)}>Services</Link></li>
+              <li><Link to="/authors" onClick={() => setIsMenuOpen(false)}>Authors</Link></li>
+              <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
+              <li><Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link></li>
+            </ul>
+          </div>
+        </nav>
       </div>
-
-      {/* Main Navigation Bar */}
-      <nav className={`main-navbar ${isMenuOpen ? 'mobile-open' : ''}`}>
-        <div className="container">
-          <ul className="nav-menu">
-            <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
-            <li className="dropdown">
-              <Link to="/catalog" onClick={() => setIsMenuOpen(false)}>
-                Catalog
-              </Link>
-              <ul className="dropdown-menu">
-                <li><Link to="/catalog?genre=fiction" onClick={() => setIsMenuOpen(false)}>Fiction</Link></li>
-                <li><Link to="/catalog?genre=non-fiction" onClick={() => setIsMenuOpen(false)}>Non-Fiction</Link></li>
-                <li><Link to="/catalog?genre=children" onClick={() => setIsMenuOpen(false)}>Children's Books</Link></li>
-                <li><Link to="/catalog?genre=academic" onClick={() => setIsMenuOpen(false)}>Academic</Link></li>
-                <li><Link to="/catalog?genre=biography" onClick={() => setIsMenuOpen(false)}>Biography</Link></li>
-                <li><Link to="/catalog?genre=poetry" onClick={() => setIsMenuOpen(false)}>Poetry</Link></li>
-              </ul>
-            </li>
-            <li><Link to="/services" onClick={() => setIsMenuOpen(false)}>Services</Link></li>
-            <li><Link to="/authors" onClick={() => setIsMenuOpen(false)}>Authors</Link></li>
-            <li><Link to="/about" onClick={() => setIsMenuOpen(false)}>About Us</Link></li>
-            <li><Link to="/contact" onClick={() => setIsMenuOpen(false)}>Contact</Link></li>
-          </ul>
-        </div>
-      </nav>
     </>
   )
 }
